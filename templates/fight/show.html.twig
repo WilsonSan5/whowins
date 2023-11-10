@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{fight.votes[0].fighter.name}}
+	VS
+	{{fight.votes[1].fighter.name}}
+{% endblock %}
+
+{% block body %}
+	<h1>{{fight.votes[0].fighter.name}}
+		VS
+		{{fight.votes[1].fighter.name}}</h1>
+	<table class="table">
+		<tbody>
+			<tr>
+				<th>Id</th>
+				<td>{{ fight.id }}</td>
+			</tr>
+			<tr>
+				<th>Is Balanced</th>
+				<td>{{ fight.isBalanced ? 'Yes' : 'No' }}</td>
+			</tr>
+			<tr>
+				<th>Is Valid</th>
+				<td>{{ fight.isValid ? 'Yes' : 'No' }}</td>
+			</tr>
+		</tbody>
+	</table>
+	<table>
+		<thead>
+			<tr>
+				<th>Fighter 1</th>
+				<th>Votes</th>
+				<th>Fighter 2</th>
+				<th>Votes</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{{fight.votes[0].fighter.name}}</td>
+				<td>{{fight.votes[0].numberOfVote}}</td>
+				<td>{{fight.votes[1].fighter.name}}</td>
+				<td>{{fight.votes[1].numberOfVote}}</td>
+			</tr>
+		</tbody>
+	</table>
+	<a href="{{ path('app_fight_index') }}">back to list</a>
+	<a href="{{ path('app_fight_edit', {'id': fight.id}) }}">edit</a>
+	{{ include('fight/_delete_form.html.twig') }}
+{% endblock %}

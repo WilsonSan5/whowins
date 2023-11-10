@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fights
+{% endblock %}
+
+{% block body %}
+	<h1>Fights</h1>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Fighter 1</th>
+				<th>Votes</th>
+				<th>Fighter 2</th>
+				<th>Votes</th>
+				<th>IsBalanced</th>
+				<th>IsValid</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for fight in fights %}
+				<tr>
+					<td>{{ fight.id }}</td>
+					<td>
+						{{ fight.votes[0].Fighter.name }}
+					</td>
+					<td>
+						{{ fight.votes[0].numberOfVote }}
+					</td>
+
+					<td>
+						{{ fight.votes[1].Fighter.name }}
+					</td>
+					<td>
+						{{ fight.votes[1].numberOfVote }}
+					</td>
+					<td>{{ fight.isBalanced ? 'Yes' : 'No' }}</td>
+					<td>{{ fight.isValid ? 'Yes' : 'No' }}</td>
+					<td>
+						<a href="{{ path('app_fight_show', {'id': fight.id}) }}">show</a>
+						<a href="{{ path('app_fight_edit', {'id': fight.id}) }}">edit</a>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="4">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+	<a href="{{ path('app_fight_new') }}">Create new</a>
+{% endblock %}
