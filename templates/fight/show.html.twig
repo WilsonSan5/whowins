@@ -1,15 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}
-	{{fight.votes[0].fighter.name}}
-	VS
-	{{fight.votes[1].fighter.name}}
+{% block title %}Fight
 {% endblock %}
 
 {% block body %}
-	<h1>{{fight.votes[0].fighter.name}}
-		VS
-		{{fight.votes[1].fighter.name}}</h1>
+	<h1>Fight</h1>
+
 	<table class="table">
 		<tbody>
 			<tr>
@@ -17,34 +13,38 @@
 				<td>{{ fight.id }}</td>
 			</tr>
 			<tr>
-				<th>Is Balanced</th>
+				<th>Is_balanced</th>
 				<td>{{ fight.isBalanced ? 'Yes' : 'No' }}</td>
-			</tr>
-			<tr>
-				<th>Is Valid</th>
-				<td>{{ fight.isValid ? 'Yes' : 'No' }}</td>
 			</tr>
 		</tbody>
 	</table>
-	<table>
+
+	<table class="table">
 		<thead>
 			<tr>
 				<th>Fighter 1</th>
 				<th>Votes</th>
 				<th>Fighter 2</th>
 				<th>Votes</th>
+				<th>Is_balanced</th>
 			</tr>
 		</thead>
 		<tbody>
 			<tr>
-				<td>{{fight.votes[0].fighter.name}}</td>
-				<td>{{fight.votes[0].numberOfVote}}</td>
-				<td>{{fight.votes[1].fighter.name}}</td>
-				<td>{{fight.votes[1].numberOfVote}}</td>
+				<td>
+					<a href='{{path('app_fighter_show', {'id': fight.votes[0].Fighter.id })}}'>{{ fight.votes[0].Fighter.name}}</a>
+				</td>
+				<td>{{ fight.votes[0].numberOfVotes}}</td>
+				<td>
+					<a href='{{path('app_fighter_show', {'id': fight.votes[1].Fighter.id })}}'>{{ fight.votes[1].Fighter.name}}</a>
+				</td>
+				<td>{{ fight.votes[1].numberOfVotes}}</td>
+				<td>{{ fight.isBalanced ? 'Yes' : 'No' }}</td>
 			</tr>
 		</tbody>
 	</table>
 	<a href="{{ path('app_fight_index') }}">back to list</a>
 	<a href="{{ path('app_fight_edit', {'id': fight.id}) }}">edit</a>
+	<a href="{{ path('app_fight_reset_vote', {'id': fight.id}) }}">reset</a>
 	{{ include('fight/_delete_form.html.twig') }}
 {% endblock %}

@@ -2,53 +2,34 @@
 
 namespace App\Entity;
 
-
-use ApiPlatform\Metadata\GetCollection;
-use App\Controller\GetRandomFightController;
-use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Serializer\Filter\PropertyFilter;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\FightRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ApiResource(
-    normalizationContext: ['groups' => ['fight:read']],
-    operations: [
-        new GetCollection(
-            name: 'getRandomFight',
-            uriTemplate: '/fights/random',
-            controller: GetRandomFightController::class,
-        )
-    ],
-    paginationEnabled: false,
-)]
-#[ApiFilter(PropertyFilter::class)]
-#[ApiFilter(SearchFilter::class, strategy: 'exact')]
 #[ORM\Entity(repositoryClass: FightRepository::class)]
+#[ApiResource]
 class Fight
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['fight:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?bool $isBalanced = null;
+    private ?bool $is_balanced = null;
 
-    #[ORM\Column]
-    private ?bool $isValid = null;
+    #[ORM\ManyToMany(targetEntity: Fighter::class, inversedBy: 'fights')]
+    private Collection $Fighters;
 
-    #[ORM\OneToMany(mappedBy: 'Fight', targetEntity: Votes::class)]
-    #[Groups(['fight:read'])]
+    #[ORM\OneToMany(mappedBy: 'Fight', targetEntity: Vote::class)]
     private Collection $votes;
+
 
     public function __construct()
     {
+        $this->Fighters = new ArrayCollection();
         $this->votes = new ArrayCollection();
     }
 
@@ -59,37 +40,49 @@ class Fight
 
     public function isIsBalanced(): ?bool
     {
-        return $this->isBalanced;
+        return $this->is_balanced;
     }
 
-    public function setIsBalanced(bool $isBalanced): static
+    public function setIsBalanced(bool $is_balanced): static
     {
-        $this->isBalanced = $isBalanced;
-
-        return $this;
-    }
-
-    public function isIsValid(): ?bool
-    {
-        return $this->isValid;
-    }
-
-    public function setIsValid(bool $isValid): static
-    {
-        $this->isValid = $isValid;
+        $this->is_balanced = $is_balanced;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, Votes>
+     * @return Collection<int, Fighter>
+     */
+    public function getFighters(): Collection
+    {
+        return $this->Fighters;
+    }
+
+    public function addFighter(Fighter $fighter): static
+    {
+        if (!$this->Fighters->contains($fighter)) {
+            $this->Fighters->add($fighter);
+        }
+
+        return $this;
+    }
+
+    public function removeFighter(Fighter $fighter): static
+    {
+        $this->Fighters->removeElement($fighter);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Vote>
      */
     public function getVotes(): Collection
     {
         return $this->votes;
     }
 
-    public function addVote(Votes $vote): static
+    public function addVote(Vote $vote): static
     {
         if (!$this->votes->contains($vote)) {
             $this->votes->add($vote);
@@ -99,7 +92,7 @@ class Fight
         return $this;
     }
 
-    public function removeVote(Votes $vote): static
+    public function removeVote(Vote $vote): static
     {
         if ($this->votes->removeElement($vote)) {
             // set the owning side to null (unless already changed)
@@ -111,4 +104,12 @@ class Fight
         return $this;
     }
 
+    public function resetVote(): static
+    {
+        $votes = $this->getVotes();
+        foreach ($votes as $vote) {
+            $vote->setNumberOfVotes(0);
+        }
+        return $this;
+    }
 }

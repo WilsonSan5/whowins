@@ -1,10 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Fights
+{% block title %}Fight index
 {% endblock %}
 
 {% block body %}
-	<h1>Fights</h1>
+	<h1>Fight index</h1>
+
+	<a href="{{ path('app_fight_new') }}">Create new</a>
+	<a href="{{ path('app_fight_reset_all') }}">Reset all votes</a>
 
 	<table class="table">
 		<thead>
@@ -14,8 +17,7 @@
 				<th>Votes</th>
 				<th>Fighter 2</th>
 				<th>Votes</th>
-				<th>IsBalanced</th>
-				<th>IsValid</th>
+				<th>Is_balanced</th>
 				<th>actions</th>
 			</tr>
 		</thead>
@@ -23,32 +25,22 @@
 			{% for fight in fights %}
 				<tr>
 					<td>{{ fight.id }}</td>
-					<td>
-						{{ fight.votes[0].Fighter.name }}
-					</td>
-					<td>
-						{{ fight.votes[0].numberOfVote }}
-					</td>
-
-					<td>
-						{{ fight.votes[1].Fighter.name }}
-					</td>
-					<td>
-						{{ fight.votes[1].numberOfVote }}
-					</td>
+					<td>{{ fight.votes[0].Fighter.name}}</td>
+					<td>{{ fight.votes[0].numberOfVotes}}</td>
+					<td>{{ fight.votes[1].Fighter.name}}</td>
+					<td>{{ fight.votes[1].numberOfVotes}}</td>
 					<td>{{ fight.isBalanced ? 'Yes' : 'No' }}</td>
-					<td>{{ fight.isValid ? 'Yes' : 'No' }}</td>
 					<td>
 						<a href="{{ path('app_fight_show', {'id': fight.id}) }}">show</a>
 						<a href="{{ path('app_fight_edit', {'id': fight.id}) }}">edit</a>
+						<a href="{{ path('app_fight_reset_vote', {'id': fight.id}) }}">reset</a>
 					</td>
 				</tr>
 			{% else %}
 				<tr>
-					<td colspan="4">no records found</td>
+					<td colspan="3">no records found</td>
 				</tr>
 			{% endfor %}
 		</tbody>
 	</table>
-	<a href="{{ path('app_fight_new') }}">Create new</a>
 {% endblock %}

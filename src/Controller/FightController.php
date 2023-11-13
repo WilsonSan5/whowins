@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Fight;
-use App\Form\FightType;
+use App\Form\Fight1Type;
 use App\Repository\FightRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/')]
+#[Route('/fight')]
 class FightController extends AbstractController
 {
     #[Route('/', name: 'app_fight_index', methods: ['GET'])]
@@ -26,7 +26,7 @@ class FightController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $fight = new Fight();
-        $form = $this->createForm(FightType::class, $fight);
+        $form = $this->createForm(Fight1Type::class, $fight);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -42,6 +42,18 @@ class FightController extends AbstractController
         ]);
     }
 
+    #[Route('/reset_all_votes', name: 'app_fight_reset_all')]
+    public function resetAllVotes(FightRepository $fightRepository, EntityManagerInterface $entityManager): Response
+    {
+        $fights = $fightRepository->findAll();
+
+        foreach ($fights as $fight) {
+            $fight->resetVote();
+        }
+        $entityManager->flush();
+        return $this->redirectToRoute('app_fight_index', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/{id}', name: 'app_fight_show', methods: ['GET'])]
     public function show(Fight $fight): Response
     {
@@ -53,7 +65,7 @@ class FightController extends AbstractController
     #[Route('/{id}/edit', name: 'app_fight_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Fight $fight, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(FightType::class, $fight);
+        $form = $this->createForm(Fight1Type::class, $fight);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -78,4 +90,15 @@ class FightController extends AbstractController
 
         return $this->redirectToRoute('app_fight_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/reset_vote/{id}', name: 'app_fight_reset_vote', methods: ['GET'])]
+    public function resetVote(Fight $fight, EntityManagerInterface $entityManager): Response
+    {
+        $fight->resetVote();
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_fight_show', ['id' => $fight->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+
 }

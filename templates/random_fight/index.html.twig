@@ -15,11 +15,11 @@
 
 	<div class="example-wrapper">
 		<h1>{{ controller_name }}</h1>
-		<h2>{{randomFight.votes[0].fighter.name}}
-			{{randomFight.votes[0].numberOfVote}}
+		<h2>{{randomFight.votes[0].Fighter.name}}
+			{{randomFight.votes[0].numberOfVotes}}
 			VS
-			{{randomFight.votes[1].fighter.name}}
-			{{randomFight.votes[1].numberOfVote}}</h2>
+			{{randomFight.votes[1].Fighter.name}}
+			{{randomFight.votes[1].numberOfVotes}}</h2>
 		<form action='{{path('app_add_vote',{vote_id:randomFight.votes[0].id })}}' method='GET'>
 			<button type='submit'>Vote for fighter 1</button>
 		</form>

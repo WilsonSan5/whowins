@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Fight;
+use App\Entity\Fighter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Fight>
+ * @extends ServiceEntityRepository<Fighter>
  *
- * @method Fight|null find($id, $lockMode = null, $lockVersion = null)
- * @method Fight|null findOneBy(array $criteria, array $orderBy = null)
- * @method Fight[]    findAll()
- * @method Fight[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Fighter|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Fighter|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Fighter[]    findAll()
+ * @method Fighter[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class FightRepository extends ServiceEntityRepository
+class FighterRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Fight::class);
+        parent::__construct($registry, Fighter::class);
     }
 
-//    /**
-//     * @return Fight[] Returns an array of Fight objects
+    //    /**
+//     * @return Fighter[] Returns an array of Fighter objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class FightRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Fight
+    //    public function findOneBySomeField($value): ?Fighter
 //    {
 //        return $this->createQueryBuilder('f')
 //            ->andWhere('f.exampleField = :val')

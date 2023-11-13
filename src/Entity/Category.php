@@ -21,12 +21,17 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
-    #[ORM\OneToMany(mappedBy: 'Category', targetEntity: Character::class)]
-    private Collection $characters;
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Fighter::class)]
+    private Collection $fighters;
+
+    public function __toString()
+    {
+        return $this->title;
+    }
 
     public function __construct()
     {
-        $this->characters = new ArrayCollection();
+        $this->fighters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,29 +64,29 @@ class Category
     }
 
     /**
-     * @return Collection<int, Character>
+     * @return Collection<int, Fighter>
      */
-    public function getCharacters(): Collection
+    public function getFighters(): Collection
     {
-        return $this->characters;
+        return $this->fighters;
     }
 
-    public function addCharacter(Character $character): static
+    public function addFighter(Fighter $fighter): static
     {
-        if (!$this->characters->contains($character)) {
-            $this->characters->add($character);
-            $character->setCategory($this);
+        if (!$this->fighters->contains($fighter)) {
+            $this->fighters->add($fighter);
+            $fighter->setCategory($this);
         }
 
         return $this;
     }
 
-    public function removeCharacter(Character $character): static
+    public function removeFighter(Fighter $fighter): static
     {
-        if ($this->characters->removeElement($character)) {
+        if ($this->fighters->removeElement($fighter)) {
             // set the owning side to null (unless already changed)
-            if ($character->getCategory() === $this) {
-                $character->setCategory(null);
+            if ($fighter->getCategory() === $this) {
+                $fighter->setCategory(null);
             }
         }
 

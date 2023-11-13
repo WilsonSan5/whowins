@@ -2,55 +2,48 @@
 
 namespace App\Entity;
 
-use App\Repository\CharacterRepository;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\FighterRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
-
-#[ApiResource(
-    operations: []
-)]
-
-#[ORM\Entity(repositoryClass: CharacterRepository::class)]
-#[ORM\Table(name: '`character`')]
-class Character
+#[ORM\Entity(repositoryClass: FighterRepository::class)]
+#[ApiResource]
+class Fighter
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['fight:read', 'votes:write'])]
-
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['fight:read'])]
     private ?string $name = null;
 
     #[ORM\Column]
     private ?int $strength = null;
 
-    #[ORM\ManyToOne(inversedBy: 'characters')]
-    private ?Category $Category = null;
+    #[ORM\Column]
+    private ?bool $is_valid = null;
 
-    #[ORM\ManyToMany(targetEntity: Fight::class, mappedBy: 'Fighter')]
+    #[ORM\ManyToOne(inversedBy: 'fighters')]
+    private ?Category $category = null;
+
+    #[ORM\ManyToMany(targetEntity: Fight::class, mappedBy: 'Fighters')]
     private Collection $fights;
 
-    #[ORM\OneToMany(mappedBy: 'Fighter', targetEntity: Votes::class)]
-    private Collection $Fight;
-
-    #[ORM\OneToMany(mappedBy: 'Fighter', targetEntity: Votes::class)]
+    #[ORM\OneToMany(mappedBy: 'Fighter', targetEntity: Vote::class)]
     private Collection $votes;
 
     public function __construct()
     {
         $this->fights = new ArrayCollection();
-        $this->Fight = new ArrayCollection();
         $this->votes = new ArrayCollection();
     }
-
+    public function __toString()
+    {
+        return $this->name;
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -80,14 +73,26 @@ class Character
         return $this;
     }
 
-    public function getCategory(): ?Category
+    public function isIsValid(): ?bool
     {
-        return $this->Category;
+        return $this->is_valid;
     }
 
-    public function setCategory(?Category $Category): static
+    public function setIsValid(bool $is_valid): static
     {
-        $this->Category = $Category;
+        $this->is_valid = $is_valid;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): static
+    {
+        $this->category = $category;
 
         return $this;
     }
@@ -120,22 +125,14 @@ class Character
     }
 
     /**
-     * @return Collection<int, Votes>
-     */
-    public function getFight(): Collection
-    {
-        return $this->Fight;
-    }
-
-    /**
-     * @return Collection<int, Votes>
+     * @return Collection<int, Vote>
      */
     public function getVotes(): Collection
     {
         return $this->votes;
     }
 
-    public function addVote(Votes $vote): static
+    public function addVote(Vote $vote): static
     {
         if (!$this->votes->contains($vote)) {
             $this->votes->add($vote);
@@ -145,7 +142,7 @@ class Character
         return $this;
     }
 
-    public function removeVote(Votes $vote): static
+    public function removeVote(Vote $vote): static
     {
         if ($this->votes->removeElement($vote)) {
             // set the owning side to null (unless already changed)

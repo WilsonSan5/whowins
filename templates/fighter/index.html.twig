@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fighter index{% endblock %}
+
+{% block body %}
+    <h1>Fighter index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Strength</th>
+                <th>Is_valid</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for fighter in fighters %}
+            <tr>
+                <td>{{ fighter.id }}</td>
+                <td>{{ fighter.name }}</td>
+                <td>{{ fighter.strength }}</td>
+                <td>{{ fighter.isValid ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_fighter_show', {'id': fighter.id}) }}">show</a>
+                    <a href="{{ path('app_fighter_edit', {'id': fighter.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_fighter_new') }}">Create new</a>
+{% endblock %}
