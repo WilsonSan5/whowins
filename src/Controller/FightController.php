@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/fight')]
+#[Route('/')]
 class FightController extends AbstractController
 {
     #[Route('/', name: 'app_fight_index', methods: ['GET'])]
@@ -71,7 +71,7 @@ class FightController extends AbstractController
     #[Route('/{id}', name: 'app_fight_delete', methods: ['POST'])]
     public function delete(Request $request, Fight $fight, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$fight->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $fight->getId(), $request->request->get('_token'))) {
             $entityManager->remove($fight);
             $entityManager->flush();
         }
