@@ -16,7 +16,6 @@ class FighterType extends AbstractType
             ->add('strength')
             ->add('is_valid')
             ->add('category')
-            ->add('fights')
         ;
     }
 
