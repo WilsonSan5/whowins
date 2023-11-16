@@ -8,11 +8,12 @@ use App\Entity\Fighter;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 // The database resets before each test thanks to DAMADoctrineTestBundle
+// WARNING ! Disable security path in security.yaml 
 class AddingFighterControllerTest extends WebTestCase
 {
     public function testAddingFighter()
     {
-        // Load the registration page
+        // Load the new Fighter page
         $client = static::createClient();
         $crawler = $client->request("GET", "/fighter/new");
         $doctrine = $client->getContainer()->get('doctrine');
