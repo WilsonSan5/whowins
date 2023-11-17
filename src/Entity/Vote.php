@@ -3,25 +3,33 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Patch;
 use App\Repository\VoteRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: VoteRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: ['PATCH' => new Patch()],
+    denormalizationContext: ['groups' => ['vote:write']],
+)]
 class Vote
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fight:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['fight:read', 'vote:write'])]
     private ?int $numberOfVotes = null;
 
     #[ORM\ManyToOne(inversedBy: 'votes')]
     private ?Fight $Fight = null;
 
     #[ORM\ManyToOne(inversedBy: 'votes')]
+    #[Groups(['fight:read'])]
     private ?Fighter $Fighter = null;
 
     public function getId(): ?int
@@ -34,6 +42,7 @@ class Vote
         return $this->numberOfVotes;
     }
 
+    #[Groups(['fight:read', 'vote:write'])]
     public function setNumberOfVotes(int $numberOfVotes): static
     {
         $this->numberOfVotes = $numberOfVotes;
@@ -62,6 +71,12 @@ class Vote
     {
         $this->Fighter = $Fighter;
 
+        return $this;
+    }
+
+    public function addVote(int $numberOfVotes): static
+    {
+        $this->numberOfVotes++;
         return $this;
     }
 }

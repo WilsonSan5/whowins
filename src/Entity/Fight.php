@@ -3,27 +3,37 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
 use App\Repository\FightRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FightRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    operations: [
+        'GET' => new GetCollection()
+    ],
+    normalizationContext: ['groups' => ['fight:read']],
+)]
 class Fight
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['fight:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['fight:read'])]
     private ?bool $is_balanced = null;
 
     #[ORM\ManyToMany(targetEntity: Fighter::class, inversedBy: 'fights')]
     private Collection $Fighters;
 
     #[ORM\OneToMany(mappedBy: 'Fight', targetEntity: Vote::class)]
+    #[Groups(['fight:read'])]
     private Collection $votes;
 
 
