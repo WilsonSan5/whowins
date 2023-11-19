@@ -25,9 +25,14 @@
 			{% for fight in fights %}
 				<tr>
 					<td>{{ fight.id }}</td>
-					<td>{{ fight.votes[0].Fighter.name}}</td>
+					<td>
+						<a href='{{path('app_fighter_show',{'id':fight.votes[0].Fighter.id })}}'>{{ fight.votes[0].Fighter.name}}</a>
+					</td>
+
 					<td>{{ fight.votes[0].numberOfVotes}}</td>
-					<td>{{ fight.votes[1].Fighter.name}}</td>
+					<td>
+						<a href='{{path('app_fighter_show',{'id':fight.votes[1].Fighter.id })}}'>{{ fight.votes[1].Fighter.name}}</a>
+					</td>
 					<td>{{ fight.votes[1].numberOfVotes}}</td>
 					<td>{{ fight.isBalanced ? 'Yes' : 'No' }}</td>
 					<td>
