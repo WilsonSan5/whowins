@@ -32,8 +32,8 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
     # Disable path for functionnal test
-        - { path: ^/fighter, roles: ROLE_USER }
-        - { path: ^/fight, roles: ROLE_USER }
+        # - { path: ^/fighter, roles: ROLE_USER }
+        # - { path: ^/fight, roles: ROLE_USER }
 
 when@test:
     security:
