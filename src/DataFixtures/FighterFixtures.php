@@ -32,10 +32,30 @@ class FighterFixtures extends Fixture implements FixtureGroupInterface
             ['name' => 'James Bond', 'strength' => 3, 'category_code' => 'MOV', 'is_valid' => true],
             ['name' => 'Black Widow', 'strength' => 3, 'category_code' => 'COM', 'is_valid' => true],
             ['name' => 'Ezio Auditore', 'strength' => 3, 'category_code' => 'GAM', 'is_valid' => true],
-            ['name' => 'Luffy', 'strength' => 5, 'category_code' => 'MAN', 'is_valid' => true]
+            ['name' => 'Luffy', 'strength' => 5, 'category_code' => 'MAN', 'is_valid' => true],
+            ['name' => 'Harry Potter', 'strength' => 3, 'category_code' => 'MOV', 'is_valid' => true],
+            ['name' => 'Saitama', 'strength' => 5, 'category_code' => 'MAN', 'is_valid' => true],
+            ['name' => 'Katniss Evergreen', 'strength' => 3, 'category_code' => 'MOV', 'is_valid' => true],
+            ['name' => 'Captain Marvel', 'strength' => 5, 'category_code' => 'COM', 'is_valid' => true],
+            ['name' => 'Master Chief', 'strength' => 4, 'category_code' => 'GAM', 'is_valid' => true],
+            ['name' => 'King Kong', 'strength' => 4, 'category_code' => 'MOV', 'is_valid' => true],
+            ['name' => 'Superman', 'strength' => 5, 'category_code' => 'COM', 'is_valid' => true],
+            ['name' => 'Wonder Woman', 'strength' => 4, 'category_code' => 'COM', 'is_valid' => true],
+            ['name' => 'Aserix', 'strength' => 3, 'category_code' => 'COM', 'is_valid' => true],
+            ['name' => 'Ryu', 'strength' => 3, 'category_code' => 'GAM', 'is_valid' => true],
+            ['name' => 'Link', 'strength' => 3, 'category_code' => 'GAM', 'is_valid' => true],
+            ['name' => 'John Snow', 'strength' => 3, 'category_code' => 'MOV', 'is_valid' => true],
+            ['name' => 'Luffy', 'strength' => 5, 'category_code' => 'MAN', 'is_valid' => true],
+            ['name' => 'Freezer', 'strength' => 5, 'category_code' => 'MAN', 'is_valid' => true],
+            ['name' => 'Geralt of Rivia', 'strength' => 5, 'category_code' => 'GAM', 'is_valid' => true],
+            ['name' => 'Godzilla', 'strength' => 5, 'category_code' => 'MOV', 'is_valid' => true],
+            ['name' => 'Hulk', 'strength' => 5, 'category_code' => 'COM', 'is_valid' => true],
+            ['name' => 'Pikachu', 'strength' => 3, 'category_code' => 'GAM', 'is_valid' => true],
+            ['name' => 'Wolverine', 'strength' => 3, 'category_code' => 'MAN', 'is_valid' => true]
+            // ['name' => '', 'strength' => , 'category_code' => '', 'is_valid' => true],
         ];
         // Characters'object
-        $fighter_object = [];
+        $fighters_object = [];
 
         foreach ($fighter_data as $fighter) {
             $newFighter = new Fighter;
@@ -43,21 +63,21 @@ class FighterFixtures extends Fixture implements FixtureGroupInterface
             $newFighter->setStrength($fighter['strength']);
             $newFighter->setCategory($this->getReference($fighter['category_code']));
             $newFighter->setIsValid(true);
-            array_push($fighter_object, $newFighter);
+            array_push($fighters_object, $newFighter);
 
             $manager->persist($newFighter);
         }
-
-        // Generating fights
-
         // Each character fights every others characters. No duplication. 
-        foreach ($fighter_object as $fighter_1) {
-            foreach (array_slice($fighter_object, 1) as $fighter_2) {
-                // Prevent characters fighting themselves
-                if ($fighter_1->getName() !== $fighter_2->getName()) {
+        foreach ($fighters_object as $key1 => $fighter_1) {
+            // Prevent characters fighting themselves
+            foreach ($fighters_object as $key2 => $fighter_2) {
+                if (
+                    $fighter_1->getName() !== $fighter_2->getName() &&
+                    $key1 < $key2
+                ) {
                     // Creating the fight
                     $newFight = new Fight;
-                    //Add Fighters to Fight
+                    // Add Fighters to Fight
                     $newFight->addFighter($fighter_1);
                     $newFight->addFighter($fighter_2);
 

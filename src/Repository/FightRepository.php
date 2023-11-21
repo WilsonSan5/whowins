@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Fight;
+use App\Entity\Fighter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,7 +22,7 @@ class FightRepository extends ServiceEntityRepository
         parent::__construct($registry, Fight::class);
     }
 
-//    /**
+    //    /**
 //     * @return Fight[] Returns an array of Fight objects
 //     */
 //    public function findByExampleField($value): array
@@ -36,7 +37,7 @@ class FightRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Fight
+    //    public function findOneBySomeField($value): ?Fight
 //    {
 //        return $this->createQueryBuilder('f')
 //            ->andWhere('f.exampleField = :val')

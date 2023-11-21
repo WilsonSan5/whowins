@@ -7,6 +7,7 @@ use App\Entity\Fight;
 use App\Entity\Vote;
 use App\Form\FighterType;
 use App\Repository\FighterRepository;
+use App\Repository\FightRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -74,10 +75,14 @@ class FighterController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_fighter_show', methods: ['GET'])]
-    public function show(Fighter $fighter): Response
+    public function show(Fighter $fighter, FightRepository $fightRepository): Response
     {
+
+
         return $this->render('fighter/show.html.twig', [
             'fighter' => $fighter,
+            'numberOfFights' => count($fighter->getFights()),
+
         ]);
     }
 

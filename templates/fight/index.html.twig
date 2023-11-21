@@ -4,11 +4,10 @@
 {% endblock %}
 
 {% block body %}
-	<h1>Fight index</h1>
-
+	<h1>{{numberOfFights}}
+		Fights</h1>
 	<a href="{{ path('app_fight_new') }}">Create new</a>
 	<a href="{{ path('app_fight_reset_all') }}">Reset all votes</a>
-
 	<table class="table">
 		<thead>
 			<tr>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Fight;
 use App\Form\Fight1Type;
+use App\Repository\FighterRepository;
 use App\Repository\FightRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,7 @@ class FightController extends AbstractController
     {
         return $this->render('fight/index.html.twig', [
             'fights' => $fightRepository->findAll(),
+            'numberOfFights' => count($fightRepository->findAll())
         ]);
     }
 
