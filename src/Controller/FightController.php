@@ -101,6 +101,4 @@ class FightController extends AbstractController
 
         return $this->redirectToRoute('app_fight_show', ['id' => $fight->getId()], Response::HTTP_SEE_OTHER);
     }
-
-
 }

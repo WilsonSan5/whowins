@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Controller\GetRandomFightsByApiController;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
 use App\Repository\FightRepository;
@@ -15,7 +16,11 @@ use ApiPlatform\Metadata\ApiFilter;
 #[ORM\Entity(repositoryClass: FightRepository::class)]
 #[ApiResource(
     operations: [
-        'GET' => new GetCollection()
+        'GET' => new GetCollection(
+            name: 'randomFights',
+            uriTemplate: '/fights/randomFight',
+            controller: GetRandomFightsByApiController::class,
+        )
     ],
     normalizationContext: ['groups' => ['fight:read']],
 )]

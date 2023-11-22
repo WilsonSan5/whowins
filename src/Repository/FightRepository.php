@@ -22,6 +22,17 @@ class FightRepository extends ServiceEntityRepository
         parent::__construct($registry, Fight::class);
     }
 
+    public function findRandomFights($limit): array
+    {
+        $allFights = $this->findAll();
+        // Mélanger l'ensemble des combats
+        shuffle($allFights);
+
+        // Extraire le nombre souhaité de combats
+        $randomFights = array_slice($allFights, 0, $limit);
+        return $randomFights;
+    }
+
     //    /**
 //     * @return Fight[] Returns an array of Fight objects
 //     */

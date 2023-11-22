@@ -41,7 +41,7 @@ class FighterFixtures extends Fixture implements FixtureGroupInterface
             ['name' => 'King Kong', 'strength' => 4, 'category_code' => 'MOV', 'is_valid' => true],
             ['name' => 'Superman', 'strength' => 5, 'category_code' => 'COM', 'is_valid' => true],
             ['name' => 'Wonder Woman', 'strength' => 4, 'category_code' => 'COM', 'is_valid' => true],
-            ['name' => 'Aserix', 'strength' => 3, 'category_code' => 'COM', 'is_valid' => true],
+            ['name' => 'Astérix', 'strength' => 3, 'category_code' => 'COM', 'is_valid' => true],
             ['name' => 'Ryu', 'strength' => 3, 'category_code' => 'GAM', 'is_valid' => true],
             ['name' => 'Link', 'strength' => 3, 'category_code' => 'GAM', 'is_valid' => true],
             ['name' => 'John Snow', 'strength' => 3, 'category_code' => 'MOV', 'is_valid' => true],

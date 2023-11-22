@@ -20,7 +20,9 @@
 			{% for fighter in fighters %}
 				<tr>
 					<td>{{ fighter.id }}</td>
-					<td>{{ fighter.name }}</td>
+					<td>
+						<a href='{{ path('app_fighter_show', {'id': fighter.id}) }}'>{{ fighter.name }}</a>
+					</td>
 					<td>{{ fighter.strength }}</td>
 					<td>{{ fighter.isValid ? 'Yes' : 'No' }}</td>
 					<td>
