@@ -67,11 +67,13 @@
 				</tr>
 			{% else %}
 				<tr>
-					<td colspan="3">no records found</td>
+					<td colspan="3">no records found
+					</td>
 				</tr>
+				<a href="{{path('app_fighter_generate_fight', {'id':fighter.id})}}">
+					Generate fights
+				</a>
 			{% endfor %}
 		</tbody>
 	</table>
-
-
 {% endblock %}

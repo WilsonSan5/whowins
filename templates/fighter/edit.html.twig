@@ -1,13 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Fighter{% endblock %}
+{% block title %}Edit Fighter
+{% endblock %}
 
 {% block body %}
-    <h1>Edit Fighter</h1>
+	<h1>Edit Fighter</h1>
 
-    {{ include('fighter/_form.html.twig', {'button_label': 'Update'}) }}
+	{{ include('fighter/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_fighter_index') }}">back to list</a>
+	<a href="{{ path('app_fighter_index') }}">Fighter list</a>
+	<a href="{{ path('app_fighter_request') }}">Back to request list</a>
 
-    {{ include('fighter/_delete_form.html.twig') }}
+	{{ include('fighter/_delete_form.html.twig') }}
 {% endblock %}
