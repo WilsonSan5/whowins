@@ -24,7 +24,7 @@ class FightRepository extends ServiceEntityRepository
 
     public function findRandomFights($limit): array
     {
-        $allFights = $this->findAll();
+        $allFights = $this->findBy(['is_balanced' => true]);
         // Mélanger l'ensemble des combats
         shuffle($allFights);
 

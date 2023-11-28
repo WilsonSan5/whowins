@@ -21,8 +21,9 @@ class FighterController extends AbstractController
     #[Route('/', name: 'app_fighter_index', methods: ['GET'])]
     public function index(FighterRepository $fighterRepository): Response
     {
+        $newFighters = $fighterRepository->findBy(['is_valid' => false]);
         return $this->render('fighter/index.html.twig', [
-            'fighters' => $fighterRepository->findAll(),
+            'fighters' => $newFighters,
         ]);
     }
 
