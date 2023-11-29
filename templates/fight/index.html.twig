@@ -6,7 +6,6 @@
 {% block body %}
 	<h1>{{numberOfFights}}
 		Fights</h1>
-	<a href="{{ path('app_fight_new') }}">Create new</a>
 	<a href="{{ path('app_fight_reset_all') }}">Reset all votes</a>
 	<table class="table">
 		<thead>
@@ -27,7 +26,6 @@
 					<td>
 						<a href='{{path('app_fighter_show',{'id':fight.votes[0].Fighter.id })}}'>{{ fight.votes[0].Fighter.name}}</a>
 					</td>
-
 					<td>{{ fight.votes[0].numberOfVotes}}</td>
 					<td>
 						<a href='{{path('app_fighter_show',{'id':fight.votes[1].Fighter.id })}}'>{{ fight.votes[1].Fighter.name}}</a>

@@ -9,6 +9,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Post;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[ORM\Entity(repositoryClass: FighterRepository::class)]
 #[ApiResource(operations: [
@@ -16,6 +18,7 @@ use ApiPlatform\Metadata\Post;
 ],
     denormalizationContext: ['groups' => ['fighter:write']]
 )]
+
 class Fighter
 {
     #[ORM\Id]
@@ -37,7 +40,8 @@ class Fighter
     #[ORM\ManyToOne(inversedBy: 'fighters')]
     private ?Category $category = null;
 
-    #[ORM\ManyToMany(targetEntity: Fight::class, mappedBy: 'Fighters')]
+
+    #[ORM\ManyToMany(targetEntity: Fight::class, mappedBy: 'Fighters', cascade: ['remove'])]
     private Collection $fights;
 
     #[ORM\OneToMany(mappedBy: 'Fighter', targetEntity: Vote::class)]
@@ -47,6 +51,7 @@ class Fighter
     {
         $this->fights = new ArrayCollection();
         $this->votes = new ArrayCollection();
+
     }
     public function __toString()
     {

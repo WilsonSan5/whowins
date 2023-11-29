@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Metadata\ApiFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FightRepository::class)]
 #[ApiResource(
@@ -25,6 +26,7 @@ use ApiPlatform\Metadata\ApiFilter;
     normalizationContext: ['groups' => ['fight:read']],
 )]
 #[ApiFilter(BooleanFilter::class, properties: ['is_balanced'])]
+#[Assert\Cascade]
 
 class Fight
 {
@@ -41,7 +43,8 @@ class Fight
     #[ORM\ManyToMany(targetEntity: Fighter::class, inversedBy: 'fights')]
     private Collection $Fighters;
 
-    #[ORM\OneToMany(mappedBy: 'Fight', targetEntity: Vote::class)]
+
+    #[ORM\OneToMany(mappedBy: 'Fight', targetEntity: Vote::class, cascade: ['remove'])]
     #[Groups(['fight:read'])]
     private Collection $votes;
 

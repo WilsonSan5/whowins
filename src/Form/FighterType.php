@@ -14,8 +14,8 @@ class FighterType extends AbstractType
         $builder
             ->add('name')
             ->add('strength')
-            ->add('is_valid')
             ->add('category')
+            ->add('is_valid')
         ;
     }
 

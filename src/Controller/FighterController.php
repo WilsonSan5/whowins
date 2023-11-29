@@ -38,6 +38,7 @@ class FighterController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager, FighterRepository $fighterRepository): Response
     {
         $fighter = new Fighter();
+        $fighter->setIsValid(true);
         $form = $this->createForm(FighterType::class, $fighter);
         $form->handleRequest($request);
 
@@ -98,8 +99,19 @@ class FighterController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $uow = $entityManager->getUnitOfWork();
+            $uow->computeChangeSets();
+            $changeSet = $uow->getEntityChangeSet($fighter);
+            if (isset($changeSet['strength']) || !$form->get('is_valid')->getData()) {
+                $allFights = $fighter->getFights();
+                foreach ($allFights as $fight) {
+                    $entityManager->remove($fight);
+                }
+            }
             $entityManager->flush();
-
+            if (isset($changeSet['strength'])) {
+                return $this->redirectToRoute('app_fighter_generate_fight', ['id' => $fighter->getId()], Response::HTTP_SEE_OTHER);
+            }
             return $this->redirectToRoute('app_fighter_show', ['id' => $fighter->getId()], Response::HTTP_SEE_OTHER);
         }
 
@@ -114,7 +126,7 @@ class FighterController extends AbstractController
     {
         // Generating new fighter's fights with all other fighter
         if ($fighter->isIsValid() === true && $fighter->getStrength() > 0) {
-            $allFighters = $fighterRepository->find(['is_valid' => true]);
+            $allFighters = $fighterRepository->findBy(['is_valid' => true]);
             foreach ($allFighters as $fighter_2) {
                 $newFight = new Fight();
                 $newFight->addFighter($fighter);
@@ -146,6 +158,17 @@ class FighterController extends AbstractController
             $entityManager->flush();
         }
 
+        return $this->redirectToRoute('app_fighter_show', ['id' => $fighter->getId()], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/removeAllFights', name: 'app_fighter_removeAllFights')]
+    public function removeAllFights(Fighter $fighter, FighterRepository $fighterRepository, EntityManagerInterface $entityManager): Response
+    {
+        $allFights = $fighter->getFights();
+        foreach ($allFights as $fight) {
+            $entityManager->remove($fight);
+            $entityManager->flush();
+        }
         return $this->redirectToRoute('app_fighter_show', ['id' => $fighter->getId()], Response::HTTP_SEE_OTHER);
     }
 

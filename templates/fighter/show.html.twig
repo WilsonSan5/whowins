@@ -34,6 +34,7 @@
 
 	<h2>{{numberOfFights}}
 		Fights</h2>
+
 	<table class="table">
 		<thead>
 			<tr>
@@ -47,6 +48,9 @@
 			</tr>
 		</thead>
 		<tbody>
+			{% if fighter.fights|length > 0 %}
+				<a href="{{ path('app_fighter_removeAllFights', {'id': fighter.id}) }}">Delete all fights</a>
+			{% endif %}
 			{% for fight in fighter.fights %}
 				<tr>
 					<td>{{ fight.id }}</td>
@@ -67,7 +71,7 @@
 				</tr>
 			{% else %}
 				<tr>
-					<td colspan="3">no records found
+					<td colspan="3">no fight found
 					</td>
 				</tr>
 				<a href="{{path('app_fighter_generate_fight', {'id':fighter.id})}}">
