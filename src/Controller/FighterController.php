@@ -102,16 +102,28 @@ class FighterController extends AbstractController
             $uow = $entityManager->getUnitOfWork();
             $uow->computeChangeSets();
             $changeSet = $uow->getEntityChangeSet($fighter);
-            if (isset($changeSet['strength']) || !$form->get('is_valid')->getData()) {
+            if (isset($changeSet['strength'])) {
+                $allFights = $fighter->getFights();
+                foreach ($allFights as $fight) {
+                    $fighter1 = $fight->getFighters()[0];
+                    $fighter2 = $fight->getFighters()[1];
+                    if ($fighter1 != null && $fighter2 != null) {
+                        if (abs($fighter1->getStrength() - $fighter2->getStrength()) < 2) {
+                            $fight->setIsBalanced(true);
+                        } else {
+                            $fight->setIsBalanced(false);
+                        }
+                    }
+                }
+            }
+            if (!$form->get('is_valid')->getData()) {
                 $allFights = $fighter->getFights();
                 foreach ($allFights as $fight) {
                     $entityManager->remove($fight);
                 }
             }
             $entityManager->flush();
-            if (isset($changeSet['strength'])) {
-                return $this->redirectToRoute('app_fighter_generate_fight', ['id' => $fighter->getId()], Response::HTTP_SEE_OTHER);
-            }
+
             return $this->redirectToRoute('app_fighter_show', ['id' => $fighter->getId()], Response::HTTP_SEE_OTHER);
         }
 
