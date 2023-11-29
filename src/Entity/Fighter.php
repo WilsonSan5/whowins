@@ -32,6 +32,11 @@ class Fighter
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\Range(
+        min: 0,
+        max: 5,
+        notInRangeMessage: 'Strength must be between {{ min }} and {{ max }}',
+    )]
     private ?int $strength = 0;
 
     #[ORM\Column]

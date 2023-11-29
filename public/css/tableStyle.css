@@ -1,0 +1,7 @@
+.valid {
+    background-color: rgb(174, 255, 174) !important;
+}
+
+.notValid {
+    background-color: rgb(255, 171, 171) !important;
+}

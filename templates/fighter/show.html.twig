@@ -4,6 +4,8 @@
 {% endblock %}
 
 {% block body %}
+
+
 	<h1>{{fighter.name}}</h1>
 
 	<table class="table">
@@ -18,11 +20,11 @@
 			</tr>
 			<tr>
 				<th>Strength</th>
-				<td>{{ fighter.strength }}</td>
+				<td class="{{ fighter.strength > 0 ? 'valid' :'notValid' }}">{{ fighter.strength }}</td>
 			</tr>
 			<tr>
 				<th>Is_valid</th>
-				<td>{{ fighter.isValid ? 'Yes' : 'No' }}</td>
+				<td class="{{ fighter.isValid ? 'valid' :'notValid' }}">{{ fighter.isValid ? 'Yes' : 'No' }}</td>
 			</tr>
 		</tbody>
 	</table>
