@@ -142,6 +142,7 @@ class Fighter
         return $this;
     }
 
+
     /**
      * @return Collection<int, Vote>
      */

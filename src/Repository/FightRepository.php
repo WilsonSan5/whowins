@@ -4,8 +4,10 @@ namespace App\Repository;
 
 use App\Entity\Fight;
 use App\Entity\Fighter;
+use App\Entity\Vote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @extends ServiceEntityRepository<Fight>
@@ -17,9 +19,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FightRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $entityManager;
+    private $fighterRepository;
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager, FighterRepository $fighterRepository)
     {
         parent::__construct($registry, Fight::class);
+        $this->entityManager = $entityManager;
+        $this->fighterRepository = $fighterRepository;
     }
 
     public function findRandomFights($limit): array
@@ -31,6 +37,40 @@ class FightRepository extends ServiceEntityRepository
         // Extraire le nombre souhaité de combats
         $randomFights = array_slice($allFights, 0, $limit);
         return $randomFights;
+    }
+
+    public function generateFightsForFighter(Fighter $fighter): void
+    {
+        $allFighters = $this->fighterRepository->findBy(['is_valid' => true]);
+        foreach ($allFighters as $fighter_2) {
+            $newFight = new Fight();
+            $newFight->addFighter($fighter);
+            $newFight->addFighter($fighter_2);
+
+            // Setting isBalanced : If the strength gap between 2 characters is less than 2, the fight is balanced.
+            if (abs($fighter->getStrength() - $fighter_2->getStrength()) < 2) {
+                $newFight->setIsBalanced(true);
+            } else
+                $newFight->setIsBalanced(false);
+
+            // Setting the votes for the new fighter
+            $newFighter_vote = new Vote;
+            $newFighter_vote->setNumberOfVotes(0);
+            $newFighter_vote->setFighter($fighter);
+            $newFight->addVote($newFighter_vote);
+
+            // Setting the votes for fighter 2
+            $fighter_2_votes = new Vote;
+            $fighter_2_votes->setNumberOfVotes(0);
+            $fighter_2_votes->setFighter($fighter_2);
+            $newFight->addVote($fighter_2_votes);
+
+            $this->entityManager->persist($newFighter_vote);
+            $this->entityManager->persist($fighter_2_votes);
+            $this->entityManager->persist($newFight);
+        }
+        $this->entityManager->persist($fighter);
+        $this->entityManager->flush();
     }
 
     //    /**
