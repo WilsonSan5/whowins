@@ -22,3 +22,4 @@
 ###> Admin Credentials ###
 /src/DataFixtures/UserFixtures.php
 ###< Admin Credentials ###
+node_modules
