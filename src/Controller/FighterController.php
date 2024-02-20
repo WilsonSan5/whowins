@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 
 #[Route('/fighter')]
@@ -65,7 +67,7 @@ class FighterController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_fighter_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Fighter $fighter, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Fighter $fighter, EntityManagerInterface $entityManager, SluggerInterface $slugger): Response
     {
         $form = $this->createForm(FighterType::class, $fighter);
         $form->handleRequest($request);
@@ -93,6 +95,26 @@ class FighterController extends AbstractController
                 foreach ($allFights as $fight) {
                     $entityManager->remove($fight);
                 }
+            }
+
+            $image = $form->get('image')->getData();
+            if ($image) {
+
+                $originalFilename = pathinfo($image->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $image->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $image->move(
+                        $this->getParameter('fighter_img_dir'), // Bouger l'image dans le bon dossier que j'ai paramétré dans services.yml
+
+                        $newFilename // nom du fichier uploadé 
+                    );
+                } catch (FileException $e) {
+                }
+                $fighter->setImage('/images/fighter/' . $newFilename); // attribution du chemin
             }
             $entityManager->flush();
 

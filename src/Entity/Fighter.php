@@ -52,6 +52,9 @@ class Fighter
     #[ORM\OneToMany(mappedBy: 'Fighter', targetEntity: Vote::class)]
     private Collection $votes;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
     public function __construct()
     {
         $this->fights = new ArrayCollection();
@@ -169,6 +172,18 @@ class Fighter
                 $vote->setFighter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
